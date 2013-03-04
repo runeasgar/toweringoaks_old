@@ -1,6 +1,6 @@
 <?php
 
-/* chrisjolly.co */
+/* chrisjolly.co directives */
 $sites['www.chrisjolly.co'] = 'chrisjolly.co';
 
 /**
