@@ -105,8 +105,8 @@ DirectoryIndex index.php index.html index.htm
   RewriteRule ^ index.php [L]
 
   # Custom Configuration by Joshua Taylor
-  Rewrite_cond %{HTTP_HOST} ^chrisjolly\.co$ [NC]
-  Rewrite_rule (.*) http://www.chrisjolly.co/$1 [L,R=301]
+  RewriteCond %{HTTP_HOST} ^chrisjolly\.co$ [NC]
+  RewriteRule (.*) http://www.chrisjolly.co/$1 [L,R=301]
 
   # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
