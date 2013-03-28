@@ -1,7 +1,8 @@
 <?php
 
 /* chrisjolly.co directives */
-$sites['www.chrisjolly.co'] = 'chrisjolly.co';
+//This is not needed.. sites are parsed left-to-right URL-wise, so www will get stripped and hit chrisjolly.co
+//$sites['www.chrisjolly.co'] = 'chrisjolly.co';
 
 /**
  * @file
