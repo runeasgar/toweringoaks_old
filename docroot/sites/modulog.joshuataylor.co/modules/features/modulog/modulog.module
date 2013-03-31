@@ -41,15 +41,19 @@ function modulog_generate_bookmarklet_code() {
 }
 
 // Sets up the user's unique bookmarklet code
+// I think this might not be working because the user isn't logged in on registration
+/*
 function modulog_user_insert(&$edit, $account, $category) {
 	$code = modulog_generate_bookmarklet_code();
-	dsm("Your bookmarklet code has been generated, and the bookmarklet is below.");
+	dsm($edit);
+	dsm("Your bookmarklet code has been generated.");
 }
+*/
 
 // Allows user to recreate their unique code, in the event of abuse
 function modulog_user_recreate_code() {
 	$new_code = modulog_generate_bookmarklet_code();
-	dsm("Your new bookmarklet code has been generated, and the new bookmarklet is below.");
+	drupal_set_message("Your new bookmarklet code has been generated, and the new bookmarklet is below.");
 	drupal_goto('user');
 }
 
@@ -72,18 +76,21 @@ function modulog_block_view($delta = '') {
     	$user_object = user_load($user->uid);
     	
       $block['subject'] = t('Your Bookmarklets');
-      $iframe_favorite_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/favorite/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='450px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='absolute';frame.style.top='0';frame.style.left='0';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
-      $iframe_review_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/mark-for-review/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='450px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='absolute';frame.style.top='0';frame.style.left='0';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
-			$favorite_link = "javascript:window.location='" . $base_url . "/flag/favorite/" 
-			. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
-			$review_link = "javascript:window.location='" . $base_url . "/flag/mark-for-review/" 
-			. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
-			$block['content'] = "Drag and drop these to your address bar, and you're all set!<p />
-				<a href=" . $iframe_favorite_link . ">Modulog:Fav</a> | 
-				<a href=" . $iframe_review_link . ">Modulog:Rev</a><p />
-				You can also <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused.
-			";
-      break;
+      if (isset($user_object->field_bookmarklet_code['und'][0]['value'])) {
+				$iframe_favorite_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/favorite/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='450px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='absolute';frame.style.top='0';frame.style.left='0';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
+				$iframe_review_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/mark-for-review/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='450px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='absolute';frame.style.top='0';frame.style.left='0';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
+				$favorite_link = "javascript:window.location='" . $base_url . "/flag/favorite/" 
+				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
+				$review_link = "javascript:window.location='" . $base_url . "/flag/mark-for-review/" 
+				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
+				$block['content'] = "Drag and drop these to your address bar, and you're all set!<p />
+					<a href=" . $iframe_favorite_link . ">Modulog:Fav</a> | 
+					<a href=" . $iframe_review_link . ">Modulog:Rev</a><p />
+					You can also <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused.";
+				break;
+			} else {
+				$block['content'] = "You must <a href='" . $base_url . "/user/recreate-code'>generate your unique code</a> before you can use bookmarklets.";
+			}
   }
   return $block;
 }
