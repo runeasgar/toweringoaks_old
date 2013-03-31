@@ -439,8 +439,8 @@ function modulog_views_default_views() {
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'You are being redirected, please wait.
-<script>window.location="http://localhost:8888/modulog/public-profile/[name]";</script>';
-  $handler->display->display_options['header']['area']['format'] = 'full_html';
+<script>window.location="<?php echo $base_url; ?>/modulog/public-profile/[name]";</script>';
+  $handler->display->display_options['header']['area']['format'] = 'php_code';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['empty'] = FALSE;
   /* No results behavior: Global: Text area */

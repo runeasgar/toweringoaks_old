@@ -23,6 +23,7 @@ function modulog_context_default_contexts() {
         'user/*' => 'user/*',
         '~user/login' => '~user/login',
         '~user/register' => '~user/register',
+        '~user/*/edit' => '~user/*/edit',
       ),
     ),
     'user' => array(

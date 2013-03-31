@@ -40,27 +40,8 @@ function modulog_menu_default_menu_links() {
     'expanded' => 0,
     'weight' => -48,
   );
-  // Exported menu link: main-menu:user
-  $menu_links['main-menu:user'] = array(
-    'menu_name' => 'main-menu',
-    'link_path' => 'user',
-    'router_path' => 'user',
-    'link_title' => 'My Bookmarklets',
-    'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => -49,
-  );
   // Translatables
   // Included for use with string extractors like potx.
-  t('My Bookmarklets');
   t('My Public Profile');
 
 
