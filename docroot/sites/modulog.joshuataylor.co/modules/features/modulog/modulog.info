@@ -14,6 +14,7 @@ dependencies[] = filter
 dependencies[] = flag
 dependencies[] = logintoboggan
 dependencies[] = menu
+dependencies[] = menu_token
 dependencies[] = number
 dependencies[] = pathauto
 dependencies[] = strongarm
