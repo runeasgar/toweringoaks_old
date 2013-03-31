@@ -200,7 +200,15 @@
  *   );
  * @endcode
  */
-$databases = array();
+$databases['default']['default'] = array(
+  'driver' => 'mysql',
+  'database' => 'joshuataylo1',
+  'username' => 'root',
+  'password' => 'root',
+  'host' => 'localhost',
+  'prefix' => '',
+  'port' => '8889',
+);
 
 /**
  * Access control for update.php script.
