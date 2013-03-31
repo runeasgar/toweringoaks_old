@@ -439,7 +439,7 @@ function modulog_views_default_views() {
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'You are being redirected, please wait.
-<script>window.location="<?php echo $base_url; ?>/modulog/public-profile/[name]";</script>';
+<script>window.location="<?php echo $base_url; ?>/public-profile/[name]";</script>';
   $handler->display->display_options['header']['area']['format'] = 'php_code';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['empty'] = FALSE;
