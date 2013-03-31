@@ -515,6 +515,6 @@ if (file_exists('/var/www/site-php')) {
   require('/var/www/site-php/joshuataylo1/modulog2-settings.inc');
 }
 
-$conf['cache_backends'][] = 'sites/all/modules/memcache/memcache.inc';
+$conf['cache_backends'][] = 'sites/all/modules/contrib/memcache/memcache.inc';
   $conf['cache_default_class'] = 'MemCacheDrupal';
-  $conf['memcache_key_prefix'] = 'something_unique';
+  $conf['memcache_key_prefix'] = 'modulog';
