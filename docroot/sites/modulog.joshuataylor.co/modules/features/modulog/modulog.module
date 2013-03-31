@@ -83,7 +83,7 @@ function modulog_block_view($delta = '') {
 				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
 				$review_link = "javascript:window.location='" . $base_url . "/flag/mark-for-review/" 
 				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
-				$block['content'] = "Drag and drop these to your address bar, and you're all set!<p />
+				$block['content'] = "Drag and drop these to your address bar, and you're ready to go to Drupal.org and start collecting modules!<p />
 					<a href=" . $iframe_favorite_link . ">Modulog:Fav</a> | 
 					<a href=" . $iframe_review_link . ">Modulog:Rev</a><p />
 					You can also <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused.";
