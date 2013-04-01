@@ -77,16 +77,17 @@ function modulog_block_view($delta = '') {
     	
       $block['subject'] = t('Your Bookmarklets');
       if (isset($user_object->field_bookmarklet_code['und'][0]['value'])) {
-				$iframe_favorite_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/favorite/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='600px';frame.setAttribute('id','modulog-message');frame.style.height='54px';frame.style.position='fixed';frame.style.top='0';frame.style.left='0';frame.style.zIndex='10000';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
-				$iframe_review_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/mark-for-review/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='600px';frame.setAttribute('id','modulog-message');frame.style.height='54px';frame.style.position='fixed';frame.style.top='0';frame.style.left='0';frame.style.zIndex='10000';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
+				$iframe_favorite_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/favorite/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='600px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='fixed';frame.style.top='0';frame.style.left='0';frame.style.zIndex='10000';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
+				$iframe_review_link = "javascript:(function(){frame=document.createElement('iframe');frame.setAttribute('src','" . $base_url . "/flag/mark-for-review/" . $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL);frame.style.width='600px';frame.setAttribute('id','modulog-message');frame.style.height='32px';frame.style.position='fixed';frame.style.top='0';frame.style.left='0';frame.style.zIndex='10000';document.body.appendChild(frame);setTimeout(function(){frame.parentNode.removeChild(frame);},10000)})();";
 				$favorite_link = "javascript:window.location='" . $base_url . "/flag/favorite/" 
 				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
 				$review_link = "javascript:window.location='" . $base_url . "/flag/mark-for-review/" 
 				. $user_object->field_bookmarklet_code['und'][0]['value'] . "/'+document.URL;";
 				$block['content'] = "Drag and drop these to your address bar, and you're ready to go to Drupal.org and start collecting modules!<p />
-					<a href=" . $iframe_favorite_link . ">Modulog:Fav</a> | 
-					<a href=" . $iframe_review_link . ">Modulog:Rev</a><p />
-					You can also <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused.";
+					<a href=" . $iframe_favorite_link . ">Mod:Fav</a> | 
+					<a href=" . $iframe_review_link . ">Mod:Rev</a><p />
+					The Mod:Fav bookmarklet adds a module to your favorites, whereas the Mod:Rev bookmarklet adds a module to your review list.<p />
+					You can <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused. You will need to update your bookmarklets afterwards.";
 				break;
 			} else {
 				$block['content'] = "You must <a href='" . $base_url . "/user/recreate-code'>generate your unique code</a> before you can use bookmarklets.";
