@@ -104,7 +104,7 @@ function modulog_flag_favorite_process($code = null, $project_name = null) {
   if (!empty($user) && !empty($nid)) {
     $flag = flag_get_flag('favorite');
   	$flag->flag('flag', $nid, $user); 
-  	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>The module $project_name has been added to your favorites. <a href='http://modulog.joshuataylor.co/favorites' target='_blank'>View your favorites.</a></div");
+  	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>The module $project_name has been added to your favorites. <a href='" . $base_url . "/modules/favorites' target='_blank'>View your favorites.</a></div");
   	exit();
   } else {
   	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>There was an error processing your request.</div>");
@@ -120,7 +120,7 @@ function modulog_flag_mark_for_review_process($code = null, $project_name = null
   if (!empty($user) && !empty($nid)) {
     $flag = flag_get_flag('mark_for_review');
   	$flag->flag('flag', $nid, $user); 
-  	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>The module $project_name has been added to your review list. <a href='http://modulog.joshuataylor.co/marked-for-review' target='_blank'>View your modules marked for review.</a></div>");
+  	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>The module $project_name has been added to your review list. <a href='" . $base_url . "/modules/marked-for-review' target='_blank'>View your modules marked for review.</a></div>");
   	exit();
   } else {
   	print("<div style='background-color: white; font-family: Arial, sans-serif; padding: 3px; font-size: 12px;'>There was an error processing your request.</div>");
