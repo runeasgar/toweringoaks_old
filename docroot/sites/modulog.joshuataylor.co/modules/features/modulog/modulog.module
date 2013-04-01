@@ -86,7 +86,7 @@ function modulog_block_view($delta = '') {
 				$block['content'] = "Drag and drop these to your address bar, and you're ready to go to Drupal.org and start collecting modules!<p />
 					<a href=" . $iframe_favorite_link . ">Mod:Fav</a> | 
 					<a href=" . $iframe_review_link . ">Mod:Rev</a><p />
-					The Mod:Fav bookmarklet adds a module to your favorites, whereas the Mod:Rev bookmarklet adds a module to your review list.<p />
+					To use your bookmarklets, visit any Drupal module page (http://drupal.org/project/views for example). The Mod:Fav bookmarklet adds a module to your favorites, whereas the Mod:Rev bookmarklet adds a module to your review list.<p />
 					You can <a href='user/recreate-code'>recreate your bookmarklet</a> with a new unique code, if you are concerned that it is being abused. You will need to update your bookmarklets afterwards.";
 				break;
 			} else {
