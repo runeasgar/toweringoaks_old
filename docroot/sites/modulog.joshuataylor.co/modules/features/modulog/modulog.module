@@ -209,7 +209,7 @@ function modulog_create_module_from_project_name($project_name) {
   $module_compatibilities = array();
   $version_found = false;
   foreach ($major_versions as $major_version) {
-    $pattern = '/<a href="\/node\/\d+">(' . $major_version . '\.x-\d\.[\d|x]+[-a-z]*?)<\/a>/';
+    $pattern = '/<a href="\/node\/\d+">(' . $major_version . '\.x-\d\.[\d|x]+[-a-z0-9]*?)<\/a>/';
     preg_match_all($pattern, $data, $matches);
     if (count($matches[1]) > 0) {
       foreach ($matches[1] as $match) {
