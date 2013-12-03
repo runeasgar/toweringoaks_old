@@ -184,7 +184,6 @@ function modulog_create_module_from_project_name($project_name) {
 
   // Execute the curl command
   $data = curl_exec($ch);
-  print_r($data);
 
   curl_close($ch);
 
@@ -212,6 +211,7 @@ function modulog_create_module_from_project_name($project_name) {
   foreach ($major_versions as $major_version) {
     $pattern = '/drupal\.org\/node\/\d+">(' . $major_version . '\.x-\d\.[\d|x]+[-a-z0-9]*?)<\/a>/';
     preg_match_all($pattern, $data, $matches);
+    var_dump($matches);
     if (count($matches[1]) > 0) {
       foreach ($matches[1] as $match) {
         array_push($module_versions, $match);
@@ -246,6 +246,6 @@ function modulog_create_module_from_project_name($project_name) {
 		node_save($node);
 		return true;
 	} else {
-		return 'The page you are on does not appear to be a Drupal.org module page.';
+		return 'The page you are on does not appear to be a Drupal.org module page.' . $data;
 	}
 }
