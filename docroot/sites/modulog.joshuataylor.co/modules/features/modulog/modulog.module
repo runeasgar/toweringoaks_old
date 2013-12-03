@@ -184,6 +184,7 @@ function modulog_create_module_from_project_name($project_name) {
 
   // Execute the curl command
   $data = curl_exec($ch);
+  print_r($data);
 
   curl_close($ch);
 
