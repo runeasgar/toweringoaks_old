@@ -209,7 +209,7 @@ function modulog_create_module_from_project_name($project_name) {
   $module_compatibilities = array();
   $version_found = false;
   foreach ($major_versions as $major_version) {
-    $pattern = '/https:\/\/drupal\.org\/node\/\d+">(' . $major_version . '\.x-\d\.[\d|x]+[-a-z0-9]*?)<\/a>/';
+    $pattern = 'drupal\.org\/node\/\d+">(' . $major_version . '\.x-\d\.[\d|x]+[-a-z0-9]*?)<\/a>/';
     echo $pattern;
     var_dump($data);
     preg_match_all($pattern, $data, $matches);
