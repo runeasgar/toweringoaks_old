@@ -171,10 +171,11 @@ function modulog_get_nid_from_url_token($project_name) {
 }
 
 function modulog_create_module_from_project_name($project_name) {
-  $url = 'https://www.drupal.org/project/' . $project_name;
+  $url = 'https://drupal.org/project/' . $project_name;
   $ch = curl_init(); 
   curl_setopt($ch, CURLOPT_URL, $url); 
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
   // These options are required to prevent drupal.org anti-scraping security methods
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION,true);
