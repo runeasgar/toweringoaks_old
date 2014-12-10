@@ -1,0 +1,263 @@
+<?php 
+
+function elite_sizing_menu() {
+
+  $items = array();
+
+  $items['admin/config/elite-sizing'] = array(
+    'title' => 'Elite Sizing',
+    'description' => 'Configure elite sizing thresholds.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('elite_sizing_admin'),
+    'access arguments' => array('administer site configuration'),
+   );
+   
+   $items['admin/config/elite-sizing/thresholds'] = array(
+    'title' => 'Sizing Thresholds',
+    'description' => 'This is where sizing thresholds for elite accounts are defined.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('elite_sizing_thresholds_admin'),
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+function elite_sizing_admin($form, &$form_state) {
+  $form = array();
+
+  return system_settings_form($form);
+}
+
+function elite_sizing_thresholds_admin($form, &$form_state) {
+  $form = array();
+
+  $form['elite_sizing_large_recommended'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Large Recommended'),
+    '#default_value' => variable_get('elite_sizing_large_recommended', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_large_strongly_recommended'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Large Strongly Recommended'),
+    '#default_value' => variable_get('elite_sizing_large_strongly_recommended', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_small_10'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Small 10 hour'),
+    '#default_value' => variable_get('elite_sizing_small_10', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_small_15'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Small 15 hour'),
+    '#default_value' => variable_get('elite_sizing_small_15', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_large_50'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Large 50%'),
+    '#default_value' => variable_get('elite_sizing_large_50', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_large_75'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Large 75%'),
+    '#default_value' => variable_get('elite_sizing_large_75', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_large_100'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Large 100%'),
+    '#default_value' => variable_get('elite_sizing_large_100', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+  
+  $form['elite_sizing_approval_required'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Approval Required'),
+    '#default_value' => variable_get('elite_sizing_approval_required', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+function elite_sizing_admin_validate($form, &$form_state) {
+  $elite_sizing_large_recommended = $form_state['values']['elite_sizing_large_recommended'];
+  if (!is_numeric($elite_sizing_large_recommended)) {
+    form_set_error('elite_sizing_large_recommended', t('You must enter an integer.'));
+  }
+  elseif ($elite_sizing_large_recommended < 0) {
+    form_set_error('elite_sizing_large_recommended', t('Cannot be less than zero.'));
+  }
+}
+
+// All of the following functions could likely be moved into hooks to remove the requirement for computed field.
+
+function computed_field_field_large_required_conclusion_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$entity_field[0]['value'] = "No";
+	foreach ($entity->field_sizing['und'] as $sizing) {
+		$sizings[] = $sizing['target_id'];
+	}
+	$circumstances = taxonomy_term_load_multiple($sizings);
+	foreach ($circumstances as $circumstance) {
+		if ($circumstance->field_large_required['und'][0]['value'] == '1') {
+			$entity_field[0]['value'] = "Yes";
+		}
+	}
+}
+
+function computed_field_field_large_lean_score_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+  // Start by adding up the points of the selected sizing items.
+	$large_points = 0;
+	foreach ($entity->field_sizing['und'] as $sizing_item) {
+		$sizing_items[] = $sizing_item['target_id'];
+	}
+	$circumstances = taxonomy_term_load_multiple($sizing_items);
+	foreach ($circumstances as $circumstance) {
+		$large_points += $circumstance->field_large_lean['und'][0]['value'];
+	}
+
+	// Then get a total of all sizing items.
+	$all_sizings = taxonomy_get_tree(2,0,null,true); // Bad practice to use the vid here - being lazy.
+	$total_points = 0;
+	foreach ($all_sizings as $circumstance) {
+		if ($circumstance->field_questionnaire_include['und'][0]['value'] == 1) {
+		  $total_points += $circumstance->field_large_lean['und'][0]['value'];
+		}
+	}
+	$entity_field[0]['value'] = round(($large_points/$total_points)*100);
+}
+
+function computed_field_field_risk_score_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	// Start by adding up the points of the selected sizing items.
+	$risk_points = 0;
+	foreach ($entity->field_sizing['und'] as $sizing_item) {
+		$sizing_items[] = $sizing_item['target_id'];
+	}
+	$circumstances = taxonomy_term_load_multiple($sizing_items);
+	foreach ($circumstances as $circumstance) {
+		$risk = taxonomy_term_load($circumstance->field_risk['und'][0]['tid']);
+		$risk_points += $risk->field_value['und'][0]['value'];
+	}
+
+	// Then get a total of all sizing items.
+	$all_sizings = taxonomy_get_tree(2,0,null,true); // Bad practice to use the vid here - being lazy.
+	$total_points = 0;
+	foreach ($all_sizings as $circumstance) {
+		if ($circumstance->field_questionnaire_include['und'][0]['value'] == 1) {
+		  $risk = taxonomy_term_load($circumstance->field_risk['und'][0]['tid']);
+		  $total_points += $risk->field_value['und'][0]['value'];
+		}
+	}
+	$entity_field[0]['value'] = round(($risk_points/$total_points)*100);
+}
+
+function computed_field_field_sizing_recommendation_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	// This could likely be handled much more intelligently, but I'm not taking the time to set up a true threshold system.
+	$thresholds = array('elite_sizing_large_recommended','elite_sizing_large_strongly_recommended','elite_sizing_small_10','elite_sizing_small_15','elite_sizing_large_50','elite_sizing_large_75','elite_sizing_large_100','elite_sizing_approval_required');
+	foreach($thresholds as $key => $value) {
+		$thresholds[$value] = variable_get($value);
+		unset($thresholds[$key]);
+	}
+	$model = "Large";
+	if ($entity->field_large_required_conclusion['und'][0]['value'] == "Yes") {
+		$model_addendum = "Required";
+	} elseif ($entity->field_large_lean_score['und'][0]['value'] >= $thresholds['elite_sizing_large_strongly_recommended']) {
+		$model_addendum = "Strongly Recommended";
+	} else {
+		$model = "Small";
+	}
+	if ($model == "Large") {
+		if ($entity->field_risk_score['und'][0]['value'] >= $thresholds['elite_sizing_large_100']) {
+			$size = "100% FTE";
+		} elseif ($entity->field_risk_score['und'][0]['value'] >= $thresholds['elite_sizing_large_75']) {
+			$size = "75% FTE";
+		} elseif ($entity->field_risk_score['und'][0]['value'] >= $thresholds['elite_sizing_large_50']) {
+			$size = "50% FTE";
+		} else {
+			$size = "25% FTE";
+		}
+	} else {
+		if ($entity->field_risk_score['und'][0]['value'] >= $thresholds['elite_sizing_small_15']) {
+			$size = "15 hours";
+		} elseif ($entity->field_risk_score['und'][0]['value'] >= $thresholds['elite_sizing_small_10']) {
+			$size = "10 hours";
+		} else {
+		  $size = "5 hours";
+		}
+	}
+	$recommended_sizing = $model . (isset($model_addendum) ? " " . $model_addendum . ", " : ", ") . $size;
+	$entity_field[0]['value'] = $recommended_sizing;
+}
+
+function computed_field_field_large_lean_profile_score_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+  // Start by adding up the points of the selected profile items.
+	$large_points = 0;
+	foreach ($entity->field_profile['und'] as $profile_item) {
+		$profile_items[] = $profile_item['target_id'];
+	}
+	$circumstances = taxonomy_term_load_multiple($profile_items);
+	foreach ($circumstances as $circumstance) {
+		$large_points += $circumstance->field_large_lean['und'][0]['value'];
+	}
+
+	// Then get a total of all profile items.
+	$all_profile_items = taxonomy_get_tree(2,0,null,true); // Bad practice to use the vid here - being lazy.
+	$total_points = 0;
+	foreach ($all_profile_items as $circumstance) {
+		if ($circumstance->field_circumstances_include['und'][0]['value'] == 1) {
+		  $total_points += $circumstance->field_large_lean['und'][0]['value'];
+		}
+	}
+	$entity_field[0]['value'] = round(($large_points/$total_points)*100);
+}
+
+function computed_field_field_risk_profile_score_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	// Start by adding up the points of the selected profile items.
+	$risk_points = 0;
+	foreach ($entity->field_profile['und'] as $profile_item) {
+		$profile_items[] = $profile_item['target_id'];
+	}
+	$circumstances = taxonomy_term_load_multiple($profile_items);
+	foreach ($circumstances as $circumstance) {
+		$risk = taxonomy_term_load($circumstance->field_risk['und'][0]['tid']);
+		$risk_points += $risk->field_value['und'][0]['value'];
+	}
+
+	// Then get a total of all profile items.
+	$all_profile_items = taxonomy_get_tree(2,0,null,true); // Bad practice to use the vid here - being lazy.
+	$total_points = 0;
+	foreach ($all_profile_items as $circumstance) {
+		if ($circumstance->field_circumstances_include['und'][0]['value'] == 1) {
+		  $risk = taxonomy_term_load($circumstance->field_risk['und'][0]['tid']);
+		  $total_points += $risk->field_value['und'][0]['value'];
+		}
+	}
+	$entity_field[0]['value'] = round(($risk_points/$total_points)*100);
+}
