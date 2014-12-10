@@ -1,7 +1,6 @@
 <?php 
 
 function elite_sizing_form_alter(&$form, &$form_state, $form_id) {
-	dsm($form_id);
   if ($form_id == 'sizing_node_form') {
     $form['actions']['submit']['#value'] = 'Size it!';
   }
