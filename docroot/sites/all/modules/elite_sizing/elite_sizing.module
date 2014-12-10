@@ -9,7 +9,7 @@ function elite_sizing_menu() {
     'description' => 'Configure elite sizing thresholds.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('elite_sizing_admin'),
-    'access arguments' => array('administer site configuration'),
+    'access arguments' => array('edit any sizing content'), // terrible way to do this
    );
    
    $items['admin/config/elite-sizing/thresholds'] = array(
@@ -17,7 +17,7 @@ function elite_sizing_menu() {
     'description' => 'This is where sizing thresholds for elite accounts are defined.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('elite_sizing_thresholds_admin'),
-    'access arguments' => array('administer site configuration'),
+    'access arguments' => array('edit any sizing content'), // terrible way to do this
   );
 
   return $items;
